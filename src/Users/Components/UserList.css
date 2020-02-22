@@ -1,0 +1,36 @@
+.user_Li {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  flex-grow: 2;
+  align-items: center;
+  margin: 1rem 0px;
+  background: #252525;
+  padding: 1rem;
+  border-radius: 5px;
+  min-width: 20rem;
+  max-width: 30rem;
+  transition: background-color 2s cubic-bezier(0, 0, 0.61, 0.79),
+    color 2s cubic-bezier(0, 0, 0.61, 0.79);
+}
+.user_Li:hover {
+  background-color: yellow;
+  color: #1e1e1e;
+  cursor: pointer;
+}
+
+.user_img > img {
+  display: block;
+  height: 4rem;
+  width: 4rem;
+  border-radius: 50%;
+  border: 1px solid black;
+  margin: 0rem 0.5rem;
+}
+
+.user_info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

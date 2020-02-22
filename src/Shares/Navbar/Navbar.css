@@ -1,0 +1,62 @@
+#Navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #ff1c4a;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+}
+#Navbar_Heading {
+  display: flex;
+  margin: 1rem;
+}
+
+#Navbar_ul,
+#burger_btn_ul {
+  display: flex;
+  list-style: none;
+}
+#burger_btn_ul {
+  flex-direction: column;
+  margin-right: 0.5rem;
+}
+#burger_btn_ul {
+  display: none;
+}
+#burger_btn_ul:hover li {
+  background-color: black;
+  cursor: pointer;
+}
+
+.burger_btn_li {
+  width: 2rem;
+  height: 0.2rem;
+  margin: 0.3rem;
+  background: #fff;
+}
+.Navbar_li {
+  margin: 0px 1rem;
+}
+.Navbar_li > a {
+  text-decoration: none;
+  display: block;
+  padding: 1rem;
+  color: white;
+  text-transform: capitalize;
+  font-size: 1.3rem;
+}
+.Navbar_li > a:hover {
+  background-color: yellow;
+  border-radius: 2px;
+  color: black;
+  font-weight: 700;
+}
+
+@media (max-width: 55rem) {
+  #Navbar_ul {
+    display: none;
+  }
+  #burger_btn_ul {
+    display: block;
+  }
+}

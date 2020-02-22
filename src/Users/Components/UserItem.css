@@ -1,0 +1,8 @@
+#User_Ul {
+  width: 80%;
+  margin: 0px auto;
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+  align-items: center;
+}

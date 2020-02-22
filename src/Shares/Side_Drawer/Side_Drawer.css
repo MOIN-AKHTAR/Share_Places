@@ -1,0 +1,36 @@
+#side_drawer_ul {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+  height: 100vh;
+  background: #fff;
+  position: fixed;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+}
+.side_drawer__li {
+  margin: 0.5rem 0rem;
+  transform: translate(0%, -50%);
+}
+.side_drawer__li > a {
+  text-decoration: none;
+  display: block;
+  color: #000;
+  font-weight: 700;
+  font-style: oblique;
+  padding: 1rem;
+}
+
+.side_drawer__li:hover > a {
+  background-color: orange;
+  border: 2px solid red;
+  border-radius: 5px;
+  color: #fff;
+}
+
+/* @media (max-width: 55rem) {
+  #side_drawer_ul {
+    display: flex;
+  }
+} */
