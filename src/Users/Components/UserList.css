@@ -2,16 +2,19 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+  text-decoration: none;
+  color: white;
   flex-grow: 2;
   align-items: center;
   margin: 1rem 0px;
-  background: #252525;
+  background: #444242;
   padding: 1rem;
   border-radius: 5px;
   min-width: 20rem;
   max-width: 30rem;
-  transition: background-color 2s cubic-bezier(0, 0, 0.61, 0.79),
-    color 2s cubic-bezier(0, 0, 0.61, 0.79);
+  transition: background-color 1s cubic-bezier(0, 0, 0.61, 0.79),
+    color 1s cubic-bezier(0, 0, 0.61, 0.79);
+  box-shadow: 2px 2px orange;
 }
 .user_Li:hover {
   background-color: yellow;

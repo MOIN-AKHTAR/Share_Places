@@ -1,0 +1,52 @@
+#places_list {
+  display: flex;
+  flex-direction: column;
+  margin: 2rem auto;
+  text-align: center;
+}
+#list_img__section {
+  height: 40rem;
+}
+#list_img__section > img {
+  display: block;
+  width: 80%;
+  height: 100%;
+  object-fit: cover;
+  margin: 0 auto;
+  border-radius: 1rem;
+}
+#list_info__section,
+#list_action__section {
+  padding: 1rem 0rem;
+  background: #fff;
+  color: black;
+  width: 80%;
+  margin: 0px auto;
+}
+#list_info__section > h1,
+#list_info__section > h2,
+#list_info__section > h3 {
+  margin-bottom: 0.5rem;
+}
+#list_action__section {
+  border-top: 4px solid black;
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+#list_action__section > button {
+  padding: 1rem 0.5rem;
+  margin: 0.5rem;
+  border-radius: 5px;
+  font-weight: 700;
+  border: none;
+  background: darkgray;
+}
+#list_action__section > button:hover {
+  cursor: pointer;
+  background: #000;
+  color: #fff;
+}
+#list_action__section > button:focus {
+  outline: none;
+}

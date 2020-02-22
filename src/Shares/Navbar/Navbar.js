@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
+import { Link } from "react-router-dom";
 import Side_Drawer from "../Side_Drawer/Side_Drawer";
 import Background from "../Bakground/Background";
 import "./Navbar.css";
@@ -17,8 +18,8 @@ export default function Navbar() {
       {/* If Show==true then Side Bar Will Be Shown */}
       {Show && (
         <React.Fragment>
-          <Background SetShow={CloseSideBar} />
-          <Side_Drawer />
+          <Background />
+          <Side_Drawer CloseSideBar={CloseSideBar} />
         </React.Fragment>
       )}
       <div id="Navbar_Heading">
@@ -37,16 +38,16 @@ export default function Navbar() {
       </div>
       <ul id="Navbar_ul">
         <li className="Navbar_li">
-          <a href="#">All Users</a>
+          <Link to="/">All Users</Link>
         </li>
         <li className="Navbar_li">
-          <a href="#">My Places</a>
+          <Link to="/:uid/places">My Places</Link>
         </li>
         <li className="Navbar_li">
-          <a href="#">Add Place</a>
+          <Link to="/addplace">Add Place</Link>
         </li>
         <li className="Navbar_li">
-          <a href="#">Authenticate</a>
+          <Link to="/auth">Authenticat</Link>
         </li>
       </ul>
     </div>

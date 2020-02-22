@@ -1,22 +1,26 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { Link } from "react-router-dom";
 import "./Side_Drawer.css";
 
-export default function Side_Drawer() {
+export default function Side_Drawer(props) {
+  const SetShowState = () => {
+    props.CloseSideBar();
+  };
   const Content = (
     <React.Fragment>
-      <ul id="side_drawer_ul">
+      <ul id="side_drawer_ul" onClick={SetShowState}>
         <li className="side_drawer__li">
-          <a href="#">ALL USERS</a>
+          <Link to="/">ALL USERS</Link>
         </li>
         <li className="side_drawer__li">
-          <a href="#">MY PLACES</a>
+          <Link to="/:uid/places">MY PLACES</Link>
         </li>
         <li className="side_drawer__li">
-          <a href="#">ADD PLACE</a>
+          <Link to="/addplace">ADD PLACE</Link>
         </li>
         <li className="side_drawer__li">
-          <a href="#">AUTHENTICATE</a>
+          <Link to="/auth">AUTHENTICATE</Link>
         </li>
       </ul>
     </React.Fragment>
