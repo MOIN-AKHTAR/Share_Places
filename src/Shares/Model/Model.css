@@ -1,0 +1,53 @@
+#Model {
+  width: 70%;
+  background-color: white;
+  padding: 1rem;
+  color: black;
+  position: fixed;
+  top: 30%;
+  left: 20%;
+  text-align: center;
+  z-index: 200;
+}
+
+#Model_Info__Section > h2 {
+  margin: 1rem 0rem;
+  color: orange;
+}
+#Model_Info__Section > h3 {
+  color: red;
+}
+
+#Model_Action__Section {
+  position: relative;
+  width: 100%;
+  height: 2.5rem;
+}
+
+#Model_Action__Section > button {
+  position: absolute;
+  top: 1rem;
+  right: 0px;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 5px;
+  background: #ff1c4a;
+  color: white;
+  font-weight: 700;
+  z-index: 200;
+}
+
+#Model_Action__Section > button:focus {
+  outline: none;
+}
+#Model_Action__Section > button:hover {
+  cursor: pointer;
+  background: #ffa500;
+}
+
+@media (max-width: 31.25rem) {
+  #Model {
+    width: 80%;
+    left: 10%;
+  }
+}

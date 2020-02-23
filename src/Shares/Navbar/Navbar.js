@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ReactDOM from "react-dom";
 import { Link } from "react-router-dom";
-import Side_Drawer from "../Side_Drawer/Side_Drawer";
+import SideDrawer from "../Side_Drawer/Side_Drawer";
 import Background from "../Bakground/Background";
 import "./Navbar.css";
 
@@ -19,7 +19,7 @@ export default function Navbar() {
       {Show && (
         <React.Fragment>
           <Background />
-          <Side_Drawer CloseSideBar={CloseSideBar} />
+          <SideDrawer CloseSideBar={CloseSideBar} />
         </React.Fragment>
       )}
       <div id="Navbar_Heading">
