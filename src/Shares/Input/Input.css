@@ -1,0 +1,64 @@
+.form-control {
+  margin: 0.3rem auto;
+  width: 80%;
+  padding: 0.3rem;
+  background: #fff;
+}
+
+.form-control label,
+.form-control input,
+.form-control textarea {
+  display: block;
+}
+
+.form-control label {
+  color: #000;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.form-control input,
+.form-control textarea {
+  width: 100%;
+  font-size: 1.2rem;
+  height: 1.7rem;
+  border: 1px solid #ccc;
+  background: #f8f8f8;
+}
+
+.form-control input:focus,
+.form-control textarea:focus {
+  outline: none;
+  background: #ebebeb;
+  border-color: #510077;
+}
+
+.form-control--invalid label,
+.form-control--invalid p {
+  color: red;
+  font-size: 1.3rem;
+}
+
+.form-control--invalid input,
+.form-control--invalid textarea {
+  border-color: red;
+  background: #ffd1d1;
+}
+
+[type="submit"] {
+  padding: 0.5rem 1rem;
+  color: #fff;
+  background: #ff1c4a;
+  border: none;
+  border-radius: 5px;
+}
+[type="submit"]:focus {
+  outline: none;
+}
+[type="submit"]:hover {
+  cursor: pointer;
+}
+[type="submit"]:disabled {
+  background: gray;
+}
