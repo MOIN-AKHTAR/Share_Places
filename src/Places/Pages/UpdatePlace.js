@@ -1,11 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Input from "../../Shares/Input/Input";
 import { VALIDATOR_REQUIRE } from "../../Shares/Utils/Validators.js";
 import { useForm } from "../../Shares/Hooks/inputHooks";
 import "./NewPlace.css";
 
-export default function NewPlace() {
-  const [states, InputHandler] = useForm(
+function UpdatePlace() {
+  const [state, InputHandler, SetDataHandler] = useForm(
     {
       title: {
         value: "",
@@ -18,18 +18,38 @@ export default function NewPlace() {
     },
     false
   );
-  const submitData = event => {
-    event.preventDefault();
-    console.log(states);
-  };
+
+  // After Making AJAX Call We Get A Place From Server---
+  let Place = {};
+  useEffect(() => {
+    SetDataHandler(
+      {
+        title: {
+          value: Place.title,
+          // Validity Of Title Is Also True Because We Will Have Value After Ajax Call
+          isValid: true
+        },
+        description: {
+          value: Place.description,
+          // Validity Of Description Is Also True Because We Will Have Value After Ajax Call
+          isValid: true
+        }
+      },
+      // Overall Form Validity Changes To True
+      true
+    );
+  });
+  if (!state.inputs.title.value) {
+    return <h1>NOT FOUND SORRY</h1>;
+  }
   return (
-    <form className="place-form" onSubmit={submitData}>
+    <form className="place-form ">
       <Input
         id={"title"}
-        element={"input"}
         type={"text"}
-        placeholder={"Please Insert Title"}
+        element={"Input"}
         label={"Title"}
+        placeholder={"Please Insert Title"}
         errorText={"Please Provide Title"}
         validators={[VALIDATOR_REQUIRE()]}
         onInput={InputHandler}
@@ -45,10 +65,12 @@ export default function NewPlace() {
         onInput={InputHandler}
       />
       <div className="form-control">
-        <button type="submit" disabled={!states.isValid}>
-          Submit
+        <button type="submit" disabled={!state.isValid}>
+          Update
         </button>
       </div>
     </form>
   );
 }
+
+export default UpdatePlace;

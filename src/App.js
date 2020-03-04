@@ -2,7 +2,7 @@ import React from "react";
 import User from "./Users/Pages/User";
 import Navbar from "./Shares/Navbar/Navbar";
 import Places from "./Places/Pages/Places";
-import NewPlace from "./Places/Pages/NewPlace";
+import UpdatePlace from "./Places/Pages/UpdatePlace";
 import {
   BrowserRouter as Router,
   Route,
@@ -15,10 +15,10 @@ function App() {
   return (
     <Router>
       <Navbar />
-      <NewPlace />
       <Switch>
         <Route path="/" exact component={User} />
-        <Route path="/:uid/places" exact component={Places} />
+        <Route path="/update/:uid/places" component={UpdatePlace} />
+        <Route path="/:uid/places" component={Places} />
         <Redirect to="/" />
       </Switch>
     </Router>

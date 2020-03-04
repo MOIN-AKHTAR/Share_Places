@@ -29,6 +29,8 @@ export default function Input(props) {
   });
   const { value, isValid } = inputState;
   const { id, onInput } = props;
+
+  // We used useEffect because onInput Modifying the States which will result in extra re-render
   useEffect(() => {
     onInput(id, value, isValid);
   }, [value, isValid, id, onInput]);
