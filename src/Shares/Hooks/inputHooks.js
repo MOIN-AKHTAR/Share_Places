@@ -1,5 +1,6 @@
 import { useCallback, useReducer } from "react";
 
+// This Mehod Is Responsible For The Whole Form Validation
 const formReducer = (State = {}, Action) => {
   switch (Action.type) {
     case "INPUT_CHANGE": {
@@ -41,10 +42,12 @@ const formReducer = (State = {}, Action) => {
 };
 
 export const useForm = (initialState, formValidation) => {
+  // Initializing State
   const [States, dispatch] = useReducer(formReducer, {
     inputs: initialState,
     isValid: formValidation
   });
+
   const InputHandler = useCallback((id, value, isValid) => {
     dispatch({
       type: "INPUT_CHANGE",
@@ -54,6 +57,7 @@ export const useForm = (initialState, formValidation) => {
     });
   }, []);
 
+  // It Will Used For Update/To Send Back New State
   const SetDataHandler = useCallback((inputs, isValid) => {
     dispatch({
       type: "SET_DATA",

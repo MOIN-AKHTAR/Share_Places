@@ -20,6 +20,7 @@
     "validator": "^12.2.0"
   },
   "scripts": {
+    "db": "nodemon ./src/Backend/Server.js",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

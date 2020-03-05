@@ -8,8 +8,8 @@ export default function Model(props) {
   return (
     <div id="Model">
       <div id="Model_Info__Section">
-        <h2>Name Of Place</h2>
-        <h3>Description Of Place</h3>
+        <h2>{"Name Of Place" || props.header}</h2>
+        <h3>{"Description Of Place" || props.description}</h3>
       </div>
       <div id="Model_Action__Section">
         <button onClick={SetShowValue}>Close</button>

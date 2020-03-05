@@ -1,23 +1,17 @@
 import React, { useState } from "react";
 import Model from "../../../Shares/Model/Model";
 import Background from "../../../Shares/Bakground/Background";
+import { useModelHooks } from "../../../Shares/Hooks/modelHooks";
 import "./PlaceList.css";
 
 export default function PlaceList(props) {
-  // Setting variable for showing or hiding Model-
-  const [Show, SetShow] = useState(false);
-  const ShowModel = () => {
-    SetShow(true);
-  };
-  const CloseModel = () => {
-    SetShow(false);
-  };
+  const [ShowModelState, ShowModel] = useModelHooks();
   return (
     <React.Fragment>
-      {Show && (
+      {ShowModelState && (
         <React.Fragment>
           <Background />
-          <Model CloseModel={CloseModel} />
+          <Model CloseModel={ShowModel} />
         </React.Fragment>
       )}
       <li id="places_list">

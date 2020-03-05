@@ -1,6 +1,7 @@
 import React, { useReducer, useEffect } from "react";
 import { validate } from "../Utils/Validators.js";
 import "./Input.css";
+// It Will Check Whether The Input Inside A Controlled Input Is Valid Or Not
 const inputReducer = (State = {}, Action) => {
   switch (Action.type) {
     case "CHANGE": {
@@ -22,6 +23,7 @@ const inputReducer = (State = {}, Action) => {
   }
 };
 export default function Input(props) {
+  // Initializing Input State
   const [inputState, dispatch] = useReducer(inputReducer, {
     value: props.value || "",
     isValid: props.isValid || false,
@@ -34,6 +36,7 @@ export default function Input(props) {
   useEffect(() => {
     onInput(id, value, isValid);
   }, [value, isValid, id, onInput]);
+  // It Will Used To Check Whethetr Each Input You Provide Is Valid Or Not-
   const eventChange = event => {
     dispatch({
       type: "CHANGE",

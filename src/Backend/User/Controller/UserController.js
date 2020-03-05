@@ -5,6 +5,12 @@ const UserModel = require("../Model/UserModel");
 exports.Sigup = AsyncWrapper(async (req, res, next) => {
   const { name, email, password, image } = req.body;
   const User = new UserModel({ name, email, password, image });
+  const CheckUser = await UserModel.findOne({
+    email
+  });
+  if (CheckUser) {
+    return next(new AppError("Check Your Email It Should Be Unique", 400));
+  }
   await User.save();
   res.status(201).json({
     Status: "Success",
