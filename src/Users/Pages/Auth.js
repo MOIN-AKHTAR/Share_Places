@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import Input from "../../Shares/Input/Input";
 import { useForm } from "../../Shares/Hooks/inputHooks";
 import LoadingSpinner from "../../Shares/Loading_Spinner/LoadingSpinner";
+import Background from "../../Shares/Bakground/Background";
+import Model from "../../Shares/Model/Model";
+import { useModelHooks } from "../../Shares/Hooks/modelHooks";
 import {
   VALIDATOR_EMAIL,
   VALIDATOR_MINLENGTH,
@@ -9,7 +12,18 @@ import {
 } from "../../Shares/Utils/Validators.js";
 import "./Auth.css";
 function Auth() {
+  // It will be used for loading when any AJAX call is maded
   const [isLoading, setIsLoading] = useState(false);
+  // This isError state make the Error Model visible if Any Error Occur After Completing AJAX call-
+  const [isError, setIsError] = useState(false);
+  // This state is used to set header of error on model
+  const [errorHeader, setErrorHeader] = useState();
+  // This state is used to set description of error on model
+  const [errorDescription, seterrorDescription] = useState();
+  // This Hook Used for Showing And Setting Model
+  const [ShowModelState, ShowModel] = useModelHooks();
+  // This State is used to figure out that we are in login mode or signup mode so that we can render and can make AJAX call appropriately..
+  const [isLogInMode, setLogInMode] = useState(true);
   const [States, InputHandler, SetDataHandler] = useForm(
     {
       email: {
@@ -23,9 +37,8 @@ function Auth() {
     },
     false
   );
-  const [isLogInMode, setLogInMode] = useState(false);
+  // It will tell that any error occur after Ajax Call Completed
   const switchModeHandler = () => {
-    setLogInMode(true);
     if (!isLogInMode) {
       SetDataHandler(
         {
@@ -48,8 +61,10 @@ function Auth() {
     }
     setLogInMode(prevMode => !prevMode);
   };
+
   const LoginOrSignup = async e => {
     e.preventDefault();
+    // Since here we are going to make AJAX call therefor we make isLoading as true
     setIsLoading(true);
     if (!isLogInMode) {
       try {
@@ -67,19 +82,78 @@ function Auth() {
             })
           }
         );
+        // Getting pure object
         const Data = await JSON_Data.json();
+        //  Checking whether result of AJAX call is +ive or not
+        if (Data.Status === "Fail") {
+          throw new Error(Data.error.message);
+        }
+        // Since AJAX call has completed therefor making as false
         setIsLoading(false);
         console.log(Data);
       } catch (error) {
-        console.log(error);
+        // Setting Model Header when error occur
+        setErrorHeader("Error Occur");
+        // Setting Model Description when error occur
+        seterrorDescription(error.message);
+        // Since AJAX call has completed therefor making as false
+        setIsLoading(false);
+        // Since Error Occur therefor making  setIsError as true
+        setIsError(true);
+        // Making ShowModelState as true because in the begging it was false and this function revert state-
+        ShowModel();
       }
     } else {
-      console.log(States);
+      try {
+        const JSON_Data = await fetch(
+          "http://localhost:5000/api/v1/user/login",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              email: States.inputs.email.value,
+              password: States.inputs.password.value
+            })
+          }
+        );
+        // Getting pure object
+        const Data = await JSON_Data.json();
+        //  Checking whether result of AJAX call is +ive or not
+        if (Data.Status === "Fail") {
+          throw new Error(Data.error.message);
+        }
+        // Since AJAX call has completed therefor making as false
+        setIsLoading(false);
+        console.log(Data);
+      } catch (error) {
+        // Setting Model Header when error occur
+        setErrorHeader("Error Occur");
+        // Setting Model Description when error occur
+        seterrorDescription(error.message);
+        // Since AJAX call has completed therefor making as false
+        setIsLoading(false);
+        // Since Error Occur therefor making  setIsError as true
+        setIsError(true);
+        // Making ShowModelState as true because in the begging it was false and this function revert state-
+        ShowModel();
+      }
     }
   };
   return (
     <React.Fragment>
       {isLoading && <LoadingSpinner asOverlay />}
+      {isError && ShowModelState && (
+        <React.Fragment>
+          <Background />
+          <Model
+            CloseModel={ShowModel}
+            header={errorHeader}
+            description={errorDescription}
+          />
+        </React.Fragment>
+      )}
       <div className={"form-control"}>
         <h2>Login Required</h2>
         <hr />
@@ -125,7 +199,7 @@ function Auth() {
               {isLogInMode ? "LOGIN" : "SIGNUP"}
             </button>
             <button type="button" onClick={switchModeHandler}>
-              Switch To {isLogInMode ? "SIGNUP" : "LOGIN"}
+              SWITCH TO {isLogInMode ? "SIGNUP" : "LOGIN"}
             </button>
           </div>
         </form>
