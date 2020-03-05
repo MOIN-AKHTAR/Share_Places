@@ -1,11 +1,42 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Input from "../../Shares/Input/Input";
 import { VALIDATOR_REQUIRE } from "../../Shares/Utils/Validators.js";
 import { useForm } from "../../Shares/Hooks/inputHooks";
+import { useParams } from "react-router-dom";
 import "./NewPlace.css";
 
 function UpdatePlace() {
-  const [state, InputHandler, SetDataHandler] = useForm(
+  const id = useParams().uid;
+  const DUMMY_PLACES = [
+    {
+      id: "p1",
+      title: "Empire State Building",
+      description: "One of the most famous sky scrapers in the world!",
+      imageUrl:
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NYC_Empire_State_Building.jpg/640px-NYC_Empire_State_Building.jpg",
+      address: "20 W 34th St, New York, NY 10001",
+      location: {
+        lat: 40.7484405,
+        lng: -73.9878584
+      },
+      creator: "u1"
+    },
+    {
+      id: "p2",
+      title: "Emp. State Building",
+      description: "One of the most famous sky scrapers in the world!",
+      imageUrl:
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NYC_Empire_State_Building.jpg/640px-NYC_Empire_State_Building.jpg",
+      address: "20 W 34th St, New York, NY 10001",
+      location: {
+        lat: 40.7484405,
+        lng: -73.9878584
+      },
+      creator: "u2"
+    }
+  ];
+  const [isLoading, setLoading] = useState(true);
+  const [States, InputHandler, SetDataHandler] = useForm(
     {
       title: {
         value: "",
@@ -18,33 +49,39 @@ function UpdatePlace() {
     },
     false
   );
-
-  // After Making AJAX Call We Get A Place From Server---
-  let Place = {};
+  const IdentifiedPlace = DUMMY_PLACES.find(Place => Place.id === id);
   useEffect(() => {
-    SetDataHandler(
-      {
-        title: {
-          value: Place.title,
-          // Validity Of Title Is Also True Because We Will Have Value After Ajax Call
-          isValid: true
+    if (IdentifiedPlace) {
+      SetDataHandler(
+        {
+          title: {
+            value: IdentifiedPlace.title,
+            isValid: true
+          },
+          description: {
+            value: IdentifiedPlace.description,
+            isValid: true
+          }
         },
-        description: {
-          value: Place.description,
-          // Validity Of Description Is Also True Because We Will Have Value After Ajax Call
-          isValid: true
-        }
-      },
-      // Overall Form Validity Changes To True
-      true
-    );
-  });
-  if (!state.inputs.title.value) {
-    return <h1>NOT FOUND SORRY</h1>;
+        true
+      );
+    }
+    setLoading(false);
+  }, [setLoading]);
+
+  if (isLoading) {
+    return <h1>Loading...</h1>;
+  }
+  if (!IdentifiedPlace) {
+    return <h1>CAN NOT FIND :(</h1>;
   }
   return (
     <form className="place-form ">
+      {/* value={States.inputs.title.value}
+        isValid={States.inputs.title.isValid} */}
       <Input
+        value={IdentifiedPlace.title}
+        isValid={true}
         id={"title"}
         type={"text"}
         element={"Input"}
@@ -54,7 +91,11 @@ function UpdatePlace() {
         validators={[VALIDATOR_REQUIRE()]}
         onInput={InputHandler}
       />
+      {/* value={States.inputs.description.value}
+        isValid={States.inputs.description.isValid} */}
       <Input
+        value={IdentifiedPlace.description}
+        isValid={true}
         id={"description"}
         type={"textarea"}
         element={"noinput"}
@@ -65,7 +106,7 @@ function UpdatePlace() {
         onInput={InputHandler}
       />
       <div className="form-control">
-        <button type="submit" disabled={!state.isValid}>
+        <button type="submit" disabled={!States.isValid}>
           Update
         </button>
       </div>
