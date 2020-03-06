@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback } from "react";
 import Model from "../../../Shares/Model/Model";
 import Background from "../../../Shares/Bakground/Background";
 import { useModelHooks } from "../../../Shares/Hooks/modelHooks";
@@ -6,6 +6,9 @@ import "./PlaceList.css";
 
 export default function PlaceList(props) {
   const [ShowModelState, ShowModel] = useModelHooks();
+  const traverse = useCallback(() => {
+    window.location.assign("/new/place");
+  });
   return (
     <React.Fragment>
       {ShowModelState && (
@@ -26,7 +29,7 @@ export default function PlaceList(props) {
         <div id="list_action__section">
           <button onClick={ShowModel}>View On Map</button>
           <button>Edit Place</button>
-          <button>Create Place</button>
+          <button onClick={traverse}>Create Place</button>
         </div>
       </li>
     </React.Fragment>

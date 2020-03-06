@@ -6,7 +6,6 @@ import { useParams } from "react-router-dom";
 import "./NewPlace.css";
 
 function UpdatePlace() {
-  console.log("UPDATE PLACE");
   const id = useParams().uid;
   const DUMMY_PLACES = [
     {
@@ -78,8 +77,6 @@ function UpdatePlace() {
   }
   return (
     <form className="place-form ">
-      {/* value={States.inputs.title.value}
-        isValid={States.inputs.title.isValid} */}
       <Input
         value={IdentifiedPlace.title}
         isValid={true}
@@ -92,8 +89,6 @@ function UpdatePlace() {
         validators={[VALIDATOR_REQUIRE()]}
         onInput={InputHandler}
       />
-      {/* value={States.inputs.description.value}
-        isValid={States.inputs.description.isValid} */}
       <Input
         value={IdentifiedPlace.description}
         isValid={true}

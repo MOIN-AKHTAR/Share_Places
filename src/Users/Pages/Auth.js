@@ -13,7 +13,6 @@ import {
 } from "../../Shares/Utils/Validators.js";
 import "./Auth.css";
 function Auth() {
-  console.log("AUTH PAGE");
   const Auth = useContext(Appcontext);
   // It will be used for loading when any AJAX call is maded
   const [isLoading, setIsLoading] = useState(false);
