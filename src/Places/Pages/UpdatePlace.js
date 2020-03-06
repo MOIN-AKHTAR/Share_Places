@@ -6,6 +6,7 @@ import { useParams } from "react-router-dom";
 import "./NewPlace.css";
 
 function UpdatePlace() {
+  console.log("UPDATE PLACE");
   const id = useParams().uid;
   const DUMMY_PLACES = [
     {

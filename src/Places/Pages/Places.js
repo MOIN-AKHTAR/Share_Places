@@ -23,6 +23,7 @@ export default function Places() {
   ];
   // Extracting uid part of URL-
   const UserId = parseInt(useParams().uid);
-  const FilteredArr = Arr.filter(Place => Place.uid === UserId);
+
+  const FilteredArr = Arr.filter(Place => parseInt(Place.uid) === UserId);
   return <PlaceItem places={FilteredArr} />;
 }

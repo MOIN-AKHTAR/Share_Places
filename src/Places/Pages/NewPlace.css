@@ -9,3 +9,7 @@
   border-radius: 6px;
   background: white;
 }
+.buttons {
+  display: flex;
+  justify-content: center;
+}

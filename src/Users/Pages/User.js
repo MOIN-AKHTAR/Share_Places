@@ -1,6 +1,7 @@
 import React from "react";
 import UserItem from "../Components/UserItem";
 export default function User() {
+  console.log("USER JS");
   return (
     <UserItem
       items={[

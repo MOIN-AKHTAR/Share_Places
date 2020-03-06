@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Input from "../../Shares/Input/Input";
 import { useForm } from "../../Shares/Hooks/inputHooks";
 import LoadingSpinner from "../../Shares/Loading_Spinner/LoadingSpinner";
 import Background from "../../Shares/Bakground/Background";
 import Model from "../../Shares/Model/Model";
 import { useModelHooks } from "../../Shares/Hooks/modelHooks";
+import { Appcontext } from "../../Shares/Context/AppContext";
 import {
   VALIDATOR_EMAIL,
   VALIDATOR_MINLENGTH,
@@ -12,6 +13,8 @@ import {
 } from "../../Shares/Utils/Validators.js";
 import "./Auth.css";
 function Auth() {
+  console.log("AUTH PAGE");
+  const Auth = useContext(Appcontext);
   // It will be used for loading when any AJAX call is maded
   const [isLoading, setIsLoading] = useState(false);
   // This isError state make the Error Model visible if Any Error Occur After Completing AJAX call-
@@ -90,6 +93,8 @@ function Auth() {
         }
         // Since AJAX call has completed therefor making as false
         setIsLoading(false);
+        // If Everything Ok Then We Will Set isLogin As True-
+        Auth.login();
         console.log(Data);
       } catch (error) {
         // Setting Model Header when error occur
@@ -126,6 +131,8 @@ function Auth() {
         }
         // Since AJAX call has completed therefor making as false
         setIsLoading(false);
+        // If Everything Ok Then We Will Set isLogin As True-
+        Auth.login();
         console.log(Data);
       } catch (error) {
         // Setting Model Header when error occur

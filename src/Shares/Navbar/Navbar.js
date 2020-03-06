@@ -1,11 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import ReactDOM from "react-dom";
 import { Link } from "react-router-dom";
 import SideDrawer from "../Side_Drawer/Side_Drawer";
 import Background from "../Bakground/Background";
+import { Appcontext } from "../Context/AppContext";
 import "./Navbar.css";
 
 export default function Navbar() {
+  const Auth = useContext(Appcontext);
+  console.log(Auth);
   // State For Showing Sidebar
   const [Show, SetShow] = useState(false);
   const OpenSideBar = () => {
@@ -37,18 +40,33 @@ export default function Navbar() {
         <h1>YourPlaces</h1>
       </div>
       <ul id="Navbar_ul">
-        <li className="Navbar_li">
-          <Link to="/">All Users</Link>
-        </li>
-        <li className="Navbar_li">
-          <Link to="/:uid/places">My Places</Link>
-        </li>
-        <li className="Navbar_li">
-          <Link to="/addplace">Add Place</Link>
-        </li>
-        <li className="Navbar_li">
-          <Link to="/auth">Authenticat</Link>
-        </li>
+        {!Auth.isLoggedin && (
+          <li className="Navbar_li">
+            <Link to="/">All Users</Link>
+          </li>
+        )}
+        {Auth.isLoggedin && (
+          <li className="Navbar_li">
+            <Link to="/:uid/places">My Places</Link>
+          </li>
+        )}
+        {Auth.isLoggedin && (
+          <li className="Navbar_li">
+            <Link to="/addplace">Add Place</Link>
+          </li>
+        )}
+        {!Auth.isLoggedin && (
+          <li className="Navbar_li">
+            <Link to="/login">Authenticat</Link>
+          </li>
+        )}
+        {Auth.isLoggedin && (
+          <li className="Navbar_li">
+            <Link to="#" onClick={Auth.logout}>
+              Logout
+            </Link>
+          </li>
+        )}
       </ul>
     </div>
   );

@@ -44,7 +44,7 @@ export default function NewPlace() {
         validators={[VALIDATOR_REQUIRE()]}
         onInput={InputHandler}
       />
-      <div className="form-control">
+      <div className="form-control buttons">
         <button type="submit" disabled={!states.isValid}>
           Submit
         </button>
