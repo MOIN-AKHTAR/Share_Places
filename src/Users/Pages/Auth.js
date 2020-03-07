@@ -4,8 +4,9 @@ import { useForm } from "../../Shares/Hooks/inputHooks";
 import LoadingSpinner from "../../Shares/Loading_Spinner/LoadingSpinner";
 import Background from "../../Shares/Bakground/Background";
 import Model from "../../Shares/Model/Model";
-import { useModelHooks } from "../../Shares/Hooks/modelHooks";
 import { Appcontext } from "../../Shares/Context/AppContext";
+import { useHttpHook } from "../../Shares/Hooks/httpHooks";
+// import { useModelHooks } from "../../Shares/Hooks/modelHooks";
 import {
   VALIDATOR_EMAIL,
   VALIDATOR_MINLENGTH,
@@ -14,16 +15,15 @@ import {
 import "./Auth.css";
 function Auth() {
   const Auth = useContext(Appcontext);
-  // It will be used for loading when any AJAX call is maded
-  const [isLoading, setIsLoading] = useState(false);
-  // This isError state make the Error Model visible if Any Error Occur After Completing AJAX call-
-  const [isError, setIsError] = useState(false);
-  // This state is used to set header of error on model
-  const [errorHeader, setErrorHeader] = useState();
-  // This state is used to set description of error on model
-  const [errorDescription, seterrorDescription] = useState();
-  // This Hook Used for Showing And Setting Model
-  const [ShowModelState, ShowModel] = useModelHooks();
+  const [
+    isLoading,
+    isError,
+    errorHeader,
+    errorDescription,
+    makeRequest,
+    clearError
+  ] = useHttpHook();
+
   // This State is used to figure out that we are in login mode or signup mode so that we can render and can make AJAX call appropriately..
   const [isLogInMode, setLogInMode] = useState(true);
   const [States, InputHandler, SetDataHandler] = useForm(
@@ -66,95 +66,55 @@ function Auth() {
 
   const LoginOrSignup = async e => {
     e.preventDefault();
-    // Since here we are going to make AJAX call therefor we make isLoading as true
-    setIsLoading(true);
     if (!isLogInMode) {
       try {
-        const JSON_Data = await fetch(
+        const Data = await makeRequest(
           "http://localhost:5000/api/v1/user/signup",
+          "POST",
+          JSON.stringify({
+            name: States.inputs.name.value,
+            email: States.inputs.email.value,
+            password: States.inputs.password.value,
+            image: "/Imgs/IMG_20181224_164433.jpg"
+          }),
           {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              name: States.inputs.name.value,
-              email: States.inputs.email.value,
-              password: States.inputs.password.value
-            })
+            "Content-Type": "application/json"
           }
         );
-        // Getting pure object
-        const Data = await JSON_Data.json();
-        //  Checking whether result of AJAX call is +ive or not
-        if (Data.Status === "Fail") {
-          throw new Error(Data.error.message);
-        }
-        // Since AJAX call has completed therefor making as false
-        setIsLoading(false);
         // If Everything Ok Then We Will Set isLogin As True-
-        Auth.login();
-        console.log(Data);
+        Auth.login(Data.User.id);
       } catch (error) {
-        // Setting Model Header when error occur
-        setErrorHeader("Error Occur");
-        // Setting Model Description when error occur
-        seterrorDescription(error.message);
-        // Since AJAX call has completed therefor making as false
-        setIsLoading(false);
-        // Since Error Occur therefor making  setIsError as true
-        setIsError(true);
-        // Making ShowModelState as true because in the begging it was false and this function revert state-
-        ShowModel();
+        console.log(error);
       }
     } else {
       try {
-        const JSON_Data = await fetch(
+        const Data = await makeRequest(
           "http://localhost:5000/api/v1/user/login",
+          "POST",
+          JSON.stringify({
+            email: States.inputs.email.value,
+            password: States.inputs.password.value
+          }),
           {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-              email: States.inputs.email.value,
-              password: States.inputs.password.value
-            })
+            "Content-Type": "application/json"
           }
         );
-        // Getting pure object
-        const Data = await JSON_Data.json();
-        //  Checking whether result of AJAX call is +ive or not
-        if (Data.Status === "Fail") {
-          throw new Error(Data.error.message);
-        }
-        // Since AJAX call has completed therefor making as false
-        setIsLoading(false);
         // If Everything Ok Then We Will Set isLogin As True-
-        Auth.login();
-        console.log(Data);
+        Auth.login(Data.User.id);
       } catch (error) {
-        // Setting Model Header when error occur
-        setErrorHeader("Error Occur");
-        // Setting Model Description when error occur
-        seterrorDescription(error.message);
-        // Since AJAX call has completed therefor making as false
-        setIsLoading(false);
-        // Since Error Occur therefor making  setIsError as true
-        setIsError(true);
         // Making ShowModelState as true because in the begging it was false and this function revert state-
-        ShowModel();
+        console.log(error);
       }
     }
   };
   return (
     <React.Fragment>
       {isLoading && <LoadingSpinner asOverlay />}
-      {isError && ShowModelState && (
+      {isError && (
         <React.Fragment>
           <Background />
           <Model
-            CloseModel={ShowModel}
+            CloseModel={clearError}
             header={errorHeader}
             description={errorDescription}
           />

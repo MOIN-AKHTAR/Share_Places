@@ -67,12 +67,12 @@ function UpdatePlace() {
       );
     }
     setLoading(false);
-  }, [setLoading]);
+  }, [IdentifiedPlace, SetDataHandler]);
 
   if (isLoading) {
     return <h1>Loading...</h1>;
   }
-  if (!IdentifiedPlace) {
+  if (!isLoading && !IdentifiedPlace) {
     return <h1>CAN NOT FIND :(</h1>;
   }
   return (

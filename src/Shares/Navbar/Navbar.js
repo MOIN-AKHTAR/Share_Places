@@ -8,7 +8,6 @@ import "./Navbar.css";
 
 export default function Navbar() {
   const Auth = useContext(Appcontext);
-  console.log(Auth);
   // State For Showing Sidebar
   const [Show, SetShow] = useState(false);
   const OpenSideBar = () => {
@@ -47,7 +46,7 @@ export default function Navbar() {
         )}
         {Auth.isLoggedin && (
           <li className="Navbar_li">
-            <Link to="/:uid/places">My Places</Link>
+            <Link to={`/${Auth.loggedInUser}/places`}>My Places</Link>
           </li>
         )}
         {Auth.isLoggedin && (

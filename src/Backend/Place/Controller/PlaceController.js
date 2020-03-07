@@ -10,7 +10,7 @@ exports.CreatePlace = AsyncWrapper(async (req, res, next) => {
     description,
     image,
     address,
-    location,
+    // location,
     creator
   });
   const User = await UserModel.findById(creator);

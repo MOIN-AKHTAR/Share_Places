@@ -15,21 +15,23 @@ import {
 import "./App.css";
 
 function App() {
-  const [isLoggedin, setIsLogIn] = useState(true);
-  const login = useCallback(() => {
+  const [isLoggedin, setIsLogIn] = useState(false);
+  const [loggedInUser, setLoggedInUser] = useState(null);
+  const login = useCallback(Id => {
+    setLoggedInUser(Id);
     setIsLogIn(true);
   }, []);
   const logout = useCallback(() => {
+    setLoggedInUser(null);
     setIsLogIn(false);
   }, []);
   let Element;
   if (isLoggedin) {
     Element = (
       <Switch>
+        <Route path="/:uid/places" exact component={Places} />
         <Route path="/update/:uid/places" component={UpdatePlace} />
         <Route path="/new/place" component={NewPlace} />
-        <Route path="/:uid/places" exact component={Places} />
-
         <Redirect to="/new/place" />
       </Switch>
     );
@@ -43,7 +45,7 @@ function App() {
     );
   }
   return (
-    <Appcontext.Provider value={{ isLoggedin, login, logout }}>
+    <Appcontext.Provider value={{ isLoggedin, loggedInUser, login, logout }}>
       <Router>
         <Navbar />
         {Element}

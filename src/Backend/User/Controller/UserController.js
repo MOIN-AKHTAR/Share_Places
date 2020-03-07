@@ -29,7 +29,7 @@ exports.Login = AsyncWrapper(async (req, res, next) => {
   }
   res.status(200).json({
     Status: "Succes",
-    User
+    User: User.toObject({ getters: true })
   });
 });
 

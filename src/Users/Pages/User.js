@@ -1,29 +1,46 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import UserItem from "../Components/UserItem";
+import Background from "../../Shares/Bakground/Background";
+import Model from "../../Shares/Model/Model";
+import { useHttpHook } from "../../Shares/Hooks/httpHooks";
+import LoadingSpinner from "../../Shares/Loading_Spinner/LoadingSpinner";
 export default function User() {
-  console.log("USER JS");
-  return (
-    <UserItem
-      items={[
-        {
-          id: 1,
-          name: "Moin Akhter",
-          image: "/Imgs/Capture.PNG",
-          places: 2
-        },
-        {
-          id: 2,
-          name: "Saqib Hussain",
-          image: "/Imgs/IMG_20181224_164433.jpg",
-          places: 5
-        },
-        {
-          id: 3,
-          name: "Iqra Saleem",
-          image: "/Imgs/IMG_20181224_164433.jpg",
-          places: 10
-        }
-      ]}
-    />
-  );
+  const [loadedUsers, setLoadedUsers] = useState();
+  const [
+    isLoading,
+    isError,
+    errorHeader,
+    errorDescription,
+    makeRequest,
+    clearError
+  ] = useHttpHook();
+  try {
+    useEffect(() => {
+      const MakeUserGetRequest = async () => {
+        const Data = await makeRequest("http://localhost:5000/api/v1/user/");
+        setLoadedUsers(Data);
+      };
+      MakeUserGetRequest();
+    }, [makeRequest]);
+  } catch (error) {}
+  if (isLoading) {
+    return <LoadingSpinner asOverlay />;
+  }
+  if (isError && !isLoading) {
+    return (
+      <React.Fragment>
+        <Background />
+        <Model
+          CloseModel={clearError}
+          header={errorHeader}
+          description={errorDescription}
+        />
+      </React.Fragment>
+    );
+  }
+  if (loadedUsers) {
+    return <UserItem items={loadedUsers} />;
+  } else {
+    return <LoadingSpinner asOverlay />;
+  }
 }
