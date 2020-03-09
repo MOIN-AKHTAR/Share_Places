@@ -33,6 +33,13 @@ export default function Side_Drawer(props) {
             <Link to="/auth">AUTHENTICATE</Link>
           </li>
         )}
+        {Auth.loggedInUser && (
+          <li className="side_drawer__li">
+            <Link to="/login" onClick={Auth.logout}>
+              Logout
+            </Link>
+          </li>
+        )}
       </ul>
     </React.Fragment>
   );
