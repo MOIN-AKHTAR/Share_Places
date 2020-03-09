@@ -3,7 +3,6 @@ import UserList from "./UserList";
 import "./UserItem.css";
 
 export default function UserItem(props) {
-  console.log(props);
   if (props.items.Users.length === 0) {
     return (
       <h1

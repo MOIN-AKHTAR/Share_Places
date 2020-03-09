@@ -2,7 +2,6 @@ import React from "react";
 import PlaceList from "../PlaceList/PlaceList";
 import "./PlaceItem.css";
 export default function PlaceItem(props) {
-  console.log(props.places.Places);
   if (props.places.length === 0) {
     return (
       <div id="NoPlaceFound">

@@ -39,7 +39,7 @@ function Auth() {
     },
     false
   );
-  // It will tell that any error occur after Ajax Call Completed
+  // It will tell that any Whether we are in login or signup mode-
   const switchModeHandler = () => {
     if (!isLogInMode) {
       SetDataHandler(
@@ -110,7 +110,7 @@ function Auth() {
   return (
     <React.Fragment>
       {isLoading && <LoadingSpinner asOverlay />}
-      {isError && (
+      {isError && !isLoading && (
         <React.Fragment>
           <Background />
           <Model

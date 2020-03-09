@@ -7,10 +7,12 @@ import LoadingSpinner from "../../Shares/Loading_Spinner/LoadingSpinner";
 import Background from "../../Shares/Bakground/Background";
 import Model from "../../Shares/Model/Model";
 import { Appcontext } from "../../Shares/Context/AppContext";
+import { useHistory } from "react-router-dom";
 import "./NewPlace.css";
 
 export default function NewPlace() {
   const Auth = useContext(Appcontext);
+  const historyObj = useHistory();
   const [
     isLoading,
     isError,
@@ -54,11 +56,12 @@ export default function NewPlace() {
             "Content-Type": "application/json"
           }
         );
+        historyObj.push(`/${Auth.loggedInUser}/places`);
       } catch (error) {
         console.log(error);
       }
     },
-    [makeRequest, states, Auth.loggedInUser]
+    [makeRequest, historyObj, states, Auth.loggedInUser]
   );
 
   return (

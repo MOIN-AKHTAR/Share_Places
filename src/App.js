@@ -29,9 +29,9 @@ function App() {
   if (isLoggedin) {
     Element = (
       <Switch>
-        <Route path="/:uid/places" exact component={Places} />
         <Route path="/update/:uid/places" component={UpdatePlace} />
         <Route path="/new/place" component={NewPlace} />
+        <Route path="/:uid/places" exact component={Places} />
         <Redirect to="/new/place" />
       </Switch>
     );

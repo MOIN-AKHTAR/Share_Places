@@ -84,6 +84,7 @@ exports.UpdatePlace = AsyncWrapper(async (req, res, next) => {
 
 exports.DeletePlace = AsyncWrapper(async (req, res, next) => {
   const Id = req.params.Id;
+  console.log(Id);
   const Place = await PlaceModel.findById(Id).populate("creator");
   if (!Place) {
     return next(new AppError("Unable To Find The Place With Provided Id", 404));

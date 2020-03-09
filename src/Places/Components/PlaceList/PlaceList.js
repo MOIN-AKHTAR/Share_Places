@@ -1,12 +1,16 @@
-import React, { useCallback } from "react";
+import React, { useState } from "react";
 import Model from "../../../Shares/Model/Model";
 import Background from "../../../Shares/Bakground/Background";
 import { useModelHooks } from "../../../Shares/Hooks/modelHooks";
 import { useHttpHook } from "../../../Shares/Hooks/httpHooks";
 import LoadingSpinner from "../../../Shares/Loading_Spinner/LoadingSpinner";
+import { Link } from "react-router-dom";
 import "./PlaceList.css";
 
 export default function PlaceList(props) {
+  const { Place } = props;
+  const { places: Places } = Place;
+  const [myplaces, setMyplaces] = useState(Places);
   const [
     isLoading,
     isError,
@@ -15,21 +19,14 @@ export default function PlaceList(props) {
     makeRequest,
     clearError
   ] = useHttpHook();
-  const DeletePlace = Id => {
-    console.log(Id);
+  const DeletePlace = async Id => {
+    try {
+      await makeRequest("http://localhost:5000/api/v1/place/" + Id, "DELETE");
+      setMyplaces(prevState => prevState.filter(Place => Place._id !== Id));
+    } catch (error) {}
   };
-  const EditPlace = Id => {
-    console.log(Id);
-  };
-
-  const { Place } = props;
-  const { places: Places } = Place;
-
   const [ShowModelState, ShowModel] = useModelHooks();
-  const traverse = useCallback(() => {
-    window.location.assign("/new/place");
-  }, []);
-  if (Places.length === 0) {
+  if (myplaces.length === 0) {
     return (
       <h1 style={{ textAlign: "center", color: "red" }}>NO PLACE FOUND :(</h1>
     );
@@ -51,7 +48,7 @@ export default function PlaceList(props) {
     } else {
       return (
         <React.Fragment key={Place._id}>
-          {Places.map(Place => (
+          {myplaces.map(Place => (
             <ul key={Place._id}>
               {ShowModelState && (
                 <React.Fragment>
@@ -59,31 +56,34 @@ export default function PlaceList(props) {
                   <Model CloseModel={ShowModel} />
                 </React.Fragment>
               )}
-              <li id="places_list">
-                <div id="list_img__section">
+              <li className="places_list">
+                <div className="list_img__section">
                   <img src={Place.image} alt="No Preview" />
                 </div>
-                <div id="list_info__section">
+                <div className="list_info__section">
                   <h1>{Place.title}</h1>
                   <h2>{Place.address}</h2>
                   <h3>{Place.description}</h3>
                 </div>
-                <div id="list_action__section">
-                  <button
-                    onClick={() => {
-                      DeletePlace(Place._id);
-                    }}
-                  >
-                    Delete
-                  </button>
-                  <button
-                    onClick={() => {
-                      EditPlace(Place._id);
-                    }}
-                  >
-                    Edit Place
-                  </button>
-                  <button onClick={traverse}>Create Place</button>
+
+                <div className="list_action__section">
+                  <div>
+                    <Link
+                      to="#"
+                      className="btn"
+                      onClick={() => {
+                        DeletePlace(Place._id);
+                      }}
+                    >
+                      Delete
+                    </Link>
+                    <Link to={`/update/${Place._id}/places`} className="btn">
+                      Update
+                    </Link>
+                    <Link to="/new/place" className="btn">
+                      Create
+                    </Link>
+                  </div>
                 </div>
               </li>
             </ul>

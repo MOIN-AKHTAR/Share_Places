@@ -1,41 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import Input from "../../Shares/Input/Input";
+import Background from "../../Shares/Bakground/Background";
+import Model from "../../Shares/Model/Model";
 import { VALIDATOR_REQUIRE } from "../../Shares/Utils/Validators.js";
 import { useForm } from "../../Shares/Hooks/inputHooks";
-import { useParams } from "react-router-dom";
+import { useHttpHook } from "../../Shares/Hooks/httpHooks";
+import { useParams, useHistory } from "react-router-dom";
+import LoadingSpinner from "../../Shares/Loading_Spinner/LoadingSpinner";
+import { Appcontext } from "../../Shares/Context/AppContext";
 import "./NewPlace.css";
 
 function UpdatePlace() {
+  const Auth = useContext(Appcontext);
   const id = useParams().uid;
-  const DUMMY_PLACES = [
-    {
-      id: "p1",
-      title: "Empire State Building",
-      description: "One of the most famous sky scrapers in the world!",
-      imageUrl:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NYC_Empire_State_Building.jpg/640px-NYC_Empire_State_Building.jpg",
-      address: "20 W 34th St, New York, NY 10001",
-      location: {
-        lat: 40.7484405,
-        lng: -73.9878584
-      },
-      creator: "u1"
-    },
-    {
-      id: "p2",
-      title: "Emp. State Building",
-      description: "One of the most famous sky scrapers in the world!",
-      imageUrl:
-        "https://upload.wikimedia.org/wikipedia/commons/thumb/d/df/NYC_Empire_State_Building.jpg/640px-NYC_Empire_State_Building.jpg",
-      address: "20 W 34th St, New York, NY 10001",
-      location: {
-        lat: 40.7484405,
-        lng: -73.9878584
-      },
-      creator: "u2"
-    }
-  ];
-  const [isLoading, setLoading] = useState(true);
+  const historyObj = useHistory();
+  const [loadedPlace, setLoadedPlace] = useState();
   const [States, InputHandler, SetDataHandler] = useForm(
     {
       title: {
@@ -49,65 +28,117 @@ function UpdatePlace() {
     },
     false
   );
-  const IdentifiedPlace = DUMMY_PLACES.find(Place => Place.id === id);
+  const [
+    isLoading,
+    isError,
+    errorHeader,
+    errorDescription,
+    makeRequest,
+    clearError
+  ] = useHttpHook();
+
+  const Update = async e => {
+    e.preventDefault();
+    try {
+      await makeRequest(
+        `http://localhost:5000/api/v1/place/${id}`,
+        "PATCH",
+        JSON.stringify({
+          title: States.inputs.title.value,
+          description: States.inputs.description.value
+        }),
+        { "Content-Type": "application/json" }
+      );
+      historyObj.push(`/${Auth.loggedInUser}/places`);
+    } catch (error) {}
+  };
   useEffect(() => {
-    if (IdentifiedPlace) {
+    const getPlace = async () => {
+      const Data = await makeRequest(
+        `http://localhost:5000/api/v1/place/${id}`
+      );
+      setLoadedPlace(Data.Place);
       SetDataHandler(
         {
           title: {
-            value: IdentifiedPlace.title,
+            value: Data.Place.title,
             isValid: true
           },
           description: {
-            value: IdentifiedPlace.description,
+            value: Data.Place.description,
             isValid: true
           }
         },
         true
       );
-    }
-    setLoading(false);
-  }, [IdentifiedPlace, SetDataHandler]);
-
+    };
+    getPlace();
+  }, [SetDataHandler, id, makeRequest]);
+  if (loadedPlace) {
+    return (
+      <form className="place-form" onSubmit={Update}>
+        <Input
+          value={loadedPlace.title}
+          isValid={true}
+          id={"title"}
+          type={"text"}
+          element={"Input"}
+          label={"Title"}
+          placeholder={"Please Insert Title"}
+          errorText={"Please Provide Title"}
+          validators={[VALIDATOR_REQUIRE()]}
+          onInput={InputHandler}
+        />
+        <Input
+          value={loadedPlace.description}
+          isValid={true}
+          id={"description"}
+          type={"textarea"}
+          element={"noinput"}
+          placeholder={"Please Insert Description"}
+          label={"Description"}
+          errorText={"Please Provide Description"}
+          validators={[VALIDATOR_REQUIRE()]}
+          onInput={InputHandler}
+        />
+        <div className="form-control buttons">
+          <button type="submit" disabled={!States.isValid}>
+            Update
+          </button>
+        </div>
+      </form>
+    );
+  }
+  if (!isLoading && !isError) {
+    return <LoadingSpinner asOverlay />;
+  }
+  if (!isLoading && !isError && !loadedPlace) {
+    return (
+      <h1
+        style={{
+          textAlign: "center",
+          color: "red"
+        }}
+      >
+        Couldn't Find Place :(
+      </h1>
+    );
+  }
   if (isLoading) {
-    return <h1>Loading...</h1>;
+    return <LoadingSpinner asOverlay />;
   }
-  if (!isLoading && !IdentifiedPlace) {
-    return <h1>CAN NOT FIND :(</h1>;
+  if (!isLoading && isError) {
+    return (
+      <React.Fragment>
+        <Background />
+        <Model
+          CloseModel={clearError}
+          header={errorHeader}
+          description={errorDescription}
+        />
+      </React.Fragment>
+    );
   }
-  return (
-    <form className="place-form ">
-      <Input
-        value={IdentifiedPlace.title}
-        isValid={true}
-        id={"title"}
-        type={"text"}
-        element={"Input"}
-        label={"Title"}
-        placeholder={"Please Insert Title"}
-        errorText={"Please Provide Title"}
-        validators={[VALIDATOR_REQUIRE()]}
-        onInput={InputHandler}
-      />
-      <Input
-        value={IdentifiedPlace.description}
-        isValid={true}
-        id={"description"}
-        type={"textarea"}
-        element={"noinput"}
-        placeholder={"Please Insert Description"}
-        label={"Description"}
-        errorText={"Please Provide Description"}
-        validators={[VALIDATOR_REQUIRE()]}
-        onInput={InputHandler}
-      />
-      <div className="form-control">
-        <button type="submit" disabled={!States.isValid}>
-          Update
-        </button>
-      </div>
-    </form>
-  );
 }
 
 export default UpdatePlace;
