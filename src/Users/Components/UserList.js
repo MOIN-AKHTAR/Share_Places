@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import "./UserList.css";
 
 export default function UserList({ name, image, places }) {
   return (
+    // It will show All user Card with there name place and image just like an overview-
     <React.Fragment>
       <Link to="/:uid/places" className="user_Li">
         <div className="user_img">

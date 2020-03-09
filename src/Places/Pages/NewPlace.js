@@ -11,8 +11,15 @@ import { useHistory } from "react-router-dom";
 import "./NewPlace.css";
 
 export default function NewPlace() {
+  // It is a Context which will bes used to check the loggedInuser Status And His/Her Id-
   const Auth = useContext(Appcontext);
+  // useHistory Hook is used to give you history related method and properties-
   const historyObj = useHistory();
+  // useHttpHook is our custom hook which will give you are we loading while making request or get some error from request's response-
+  // isError will show do we have any error during request-
+  // errorheader and description will give you whole information on a model-
+  // Makerequest is a function which help you to make request-
+  // clearError is a function which will set isError as false inorder to close the error model
   const [
     isLoading,
     isError,
@@ -21,6 +28,8 @@ export default function NewPlace() {
     makeRequest,
     clearError
   ] = useHttpHook();
+  // here useForm is a custom hook which will set your initial data and provude you states-
+  // Inputhandler will let you to check whether the whole form data is valid or not-
   const [states, InputHandler] = useForm(
     {
       title: {
@@ -38,6 +47,7 @@ export default function NewPlace() {
     },
     false
   );
+  // It will add the place-
   const AddPlace = useCallback(
     async event => {
       event.preventDefault();
@@ -56,27 +66,31 @@ export default function NewPlace() {
             "Content-Type": "application/json"
           }
         );
+        // Taking user to his/her places
         historyObj.push(`/${Auth.loggedInUser}/places`);
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     },
+    // Dependencies
     [makeRequest, historyObj, states, Auth.loggedInUser]
   );
 
   return (
     <React.Fragment>
+      {/* If we are loading we will show spinner */}
       {isLoading && <LoadingSpinner asOverlay />}
-      {isError && (
-        <React.Fragment>
-          <Background />
-          <Model
-            CloseModel={clearError}
-            header={errorHeader}
-            description={errorDescription}
-          />
-        </React.Fragment>
-      )}
+      {/* If any error occur and request send response with error we will show model with black backgound */}
+      {isError &&
+        !isLoading(
+          <React.Fragment>
+            <Background />
+            <Model
+              CloseModel={clearError}
+              header={errorHeader}
+              description={errorDescription}
+            />
+          </React.Fragment>
+        )}
+      {/* Otherwise form will be shown */}
       <form className="place-form" onSubmit={AddPlace}>
         <Input
           id={"title"}
@@ -109,6 +123,7 @@ export default function NewPlace() {
           onInput={InputHandler}
         />
         <div className="form-control buttons">
+          {/* Submit button will be able if whole form data is valid otherwise it i'll be disabled- */}
           <button type="submit" disabled={!states.isValid}>
             Submit
           </button>

@@ -14,7 +14,13 @@ import {
 } from "../../Shares/Utils/Validators.js";
 import "./Auth.css";
 function Auth() {
+  // It is a Context which will bes used to check the loggedInuser Status And His/Her Id-
   const Auth = useContext(Appcontext);
+  // useHttpHook is our custom hook which will give you are we loading while making request or get some error from request's response-
+  // isError will show do we have any error during request-
+  // errorheader and description will give you whole information on a model-
+  // Makerequest is a function which help you to make request-
+  // clearError is a function which will set isError as false inorder to close the error model
   const [
     isLoading,
     isError,
@@ -26,6 +32,8 @@ function Auth() {
 
   // This State is used to figure out that we are in login mode or signup mode so that we can render and can make AJAX call appropriately..
   const [isLogInMode, setLogInMode] = useState(true);
+  // here useForm is a custom hook which will set your initial data and provude you states-
+  // Inputhandler will let you to check whether the whole form data is valid or not-
   const [States, InputHandler, SetDataHandler] = useForm(
     {
       email: {
@@ -61,6 +69,7 @@ function Auth() {
         false
       );
     }
+    // It will change mode if we are in login it will change to signup and vice versa-
     setLogInMode(prevMode => !prevMode);
   };
 
@@ -83,9 +92,7 @@ function Auth() {
         );
         // If Everything Ok Then We Will Set isLogin As True-
         Auth.login(Data.User.id);
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     } else {
       try {
         const Data = await makeRequest(
@@ -109,7 +116,9 @@ function Auth() {
   };
   return (
     <React.Fragment>
+      {/* If we are loading then we will show spinner */}
       {isLoading && <LoadingSpinner asOverlay />}
+      {/* If any error we will show background and error model */}
       {isError && !isLoading && (
         <React.Fragment>
           <Background />
@@ -121,9 +130,10 @@ function Auth() {
         </React.Fragment>
       )}
       <div className={"form-control"}>
-        <h2>Login Required</h2>
+        {isLoading ? <h2>Login Required</h2> : <h2>Signup Required</h2>}
         <hr />
         <form onSubmit={switchModeHandler}>
+          {/* If we are is not in loginmode the Name input will also be visible- */}
           {!isLogInMode && (
             <Input
               element={"input"}
