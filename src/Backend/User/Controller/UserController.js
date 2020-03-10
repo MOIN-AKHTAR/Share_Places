@@ -3,8 +3,13 @@ const AsyncWrapper = require("../../Utils/AsyncWrapper");
 const UserModel = require("../Model/UserModel");
 
 exports.Signup = AsyncWrapper(async (req, res, next) => {
-  const { name, email, password, image } = req.body;
-  const User = new UserModel({ name, email, password, image });
+  const { name, email, password } = req.body;
+  const User = new UserModel({
+    name,
+    email,
+    password,
+    image: req.file.path
+  });
   const CheckUser = await UserModel.findOne({
     email
   });

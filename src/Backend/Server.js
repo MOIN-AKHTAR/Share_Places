@@ -1,5 +1,6 @@
 const Express = require("express");
 const App = require("./App");
+const Path = require("path");
 const AppError = require("./Utils/AppError");
 const CustomError = require("./Utils/CustomError");
 const PlaceRoute = require("./Place/Route/PlaceRoute");
@@ -27,6 +28,12 @@ App.use((req, res, next) => {
   }
   next();
 });
+// For Accessing Image-
+// Where we have path of http://localhost:5000/src/Upload/Images/RandomId
+App.use(
+  "/src/Upload/Images",
+  Express.static(Path.join(__dirname, "..", "Upload", "Images"))
+);
 // API'S ENDPOINTS
 App.use("/api/v1/place", PlaceRoute);
 App.use("/api/v1/user", UserRoute);

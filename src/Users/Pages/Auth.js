@@ -83,18 +83,15 @@ function Auth() {
     e.preventDefault();
     if (!isLogInMode) {
       try {
+        const formData = new FormData();
+        formData.append("name", States.inputs.name.value);
+        formData.append("email", States.inputs.email.value);
+        formData.append("password", States.inputs.password.value);
+        formData.append("image", States.inputs.image.value);
         const Data = await makeRequest(
           "http://localhost:5000/api/v1/user/signup",
           "POST",
-          JSON.stringify({
-            name: States.inputs.name.value,
-            email: States.inputs.email.value,
-            password: States.inputs.password.value,
-            image: States.inputs.image.value
-          }),
-          {
-            "Content-Type": "application/json"
-          }
+          formData
         );
         // If Everything Ok Then We Will Set isLogin As True-
         Auth.login(Data.User.id);

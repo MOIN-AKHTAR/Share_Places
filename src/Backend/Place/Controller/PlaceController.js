@@ -2,15 +2,15 @@ const PlaceModel = require("../Model/PlaceModel");
 const UserModel = require("../../User/Model/UserModel");
 const AsyncWrapper = require("../../Utils/AsyncWrapper");
 const AppError = require("../../Utils/AppError");
+const fs = require("fs");
 
 exports.CreatePlace = AsyncWrapper(async (req, res, next) => {
-  const { title, description, image, address, location, creator } = req.body;
+  const { title, description, address, creator } = req.body;
   const Place = new PlaceModel({
     title,
     description,
-    image,
+    image: req.file.path,
     address,
-    // location,
     creator
   });
   const User = await UserModel.findById(creator);
@@ -84,7 +84,6 @@ exports.UpdatePlace = AsyncWrapper(async (req, res, next) => {
 
 exports.DeletePlace = AsyncWrapper(async (req, res, next) => {
   const Id = req.params.Id;
-  console.log(Id);
   const Place = await PlaceModel.findById(Id).populate("creator");
   if (!Place) {
     return next(new AppError("Unable To Find The Place With Provided Id", 404));
@@ -92,6 +91,8 @@ exports.DeletePlace = AsyncWrapper(async (req, res, next) => {
   await Place.remove();
   Place.creator.places.pull(Place);
   await Place.creator.save();
+  // It Will Delete The Picure Of Image From Static Folder-
+  fs.unlink(Place.image, err => {});
   res.status(200).json({
     Status: "Sucess",
     Message: "Deleted Item With Id " + Id + " Has Been Deleted :)"

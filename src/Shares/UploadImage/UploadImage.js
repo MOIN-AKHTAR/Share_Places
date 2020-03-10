@@ -11,14 +11,13 @@ function UploadImage(props) {
     if (e.target.files && e.target.files.length === 1) {
       // We used pickedFile in onInput function because setFile is Async function which will not work properly-
       pickedFile = e.target.files[0];
-      console.log(pickedFile);
       setFile(e.target.files[0]);
       setIsValid(true);
       isValidFile = true;
     } else {
       setIsValid(false);
     }
-    props.onInput(props.id, pickedFile.name, isValidFile);
+    props.onInput(props.id, pickedFile, isValidFile);
   };
   const pickImageHandler = () => {
     filePickerRef.current.click();
@@ -42,11 +41,12 @@ function UploadImage(props) {
       <input
         type="file"
         id={props.id}
-        accept=".jpg,.png,.jpeg"
+        accept=".png,.jpg,.jpeg"
         style={{ display: "none" }}
         ref={filePickerRef}
         onChange={pickedHandler}
       />
+      {/* accept=".jpg,.png,.jpeg" */}
       <div>
         <div className="image-upload__preview">
           {previewUrl && <img src={previewUrl} alt="Preview" />}

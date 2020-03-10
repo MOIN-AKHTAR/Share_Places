@@ -73,12 +73,24 @@ export default function PlaceList(props) {
               )}
               <li className="places_list">
                 <div className="list_img__section">
-                  <img src={Place.image} alt="No Preview" />
+                  <img
+                    src={`http://localhost:5000/${Place.image}`}
+                    alt="No Preview"
+                  />
                 </div>
+
                 <div className="list_info__section">
                   <h1>{Place.title}</h1>
-                  <h2>{Place.address}</h2>
-                  <h3>{Place.description}</h3>
+                  <h2>
+                    {Place.address.length <= 15
+                      ? Place.address
+                      : Place.address.slice(0, 14) + "..."}
+                  </h2>
+                  <h3>
+                    {Place.description.length <= 15
+                      ? Place.description
+                      : Place.description.slice(0, 14) + "..."}
+                  </h3>
                 </div>
 
                 <div className="list_action__section">
@@ -87,7 +99,7 @@ export default function PlaceList(props) {
                       to="#"
                       className="btn"
                       onClick={() => {
-                        DeletePlace(Place._id);
+                        DeletePlace(Place._id, Place.image);
                       }}
                     >
                       Delete

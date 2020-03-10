@@ -8,6 +8,7 @@ import Background from "../../Shares/Bakground/Background";
 import Model from "../../Shares/Model/Model";
 import { Appcontext } from "../../Shares/Context/AppContext";
 import { useHistory } from "react-router-dom";
+import UploadImage from "../../Shares/UploadImage/UploadImage";
 import "./NewPlace.css";
 
 export default function NewPlace() {
@@ -43,6 +44,10 @@ export default function NewPlace() {
       address: {
         value: "",
         isValid: false
+      },
+      image: {
+        value: "",
+        isValid: false
       }
     },
     false
@@ -52,19 +57,16 @@ export default function NewPlace() {
     async event => {
       event.preventDefault();
       try {
+        const formData = new FormData();
+        formData.append("title", states.inputs.title.value);
+        formData.append("description", states.inputs.description.value);
+        formData.append("address", states.inputs.address.value);
+        formData.append("creator", Auth.loggedInUser);
+        formData.append("image", states.inputs.image.value);
         await makeRequest(
           "http://localhost:5000/api/v1/place/",
           "POST",
-          JSON.stringify({
-            title: states.inputs.title.value,
-            description: states.inputs.description.value,
-            address: states.inputs.address.value,
-            creator: Auth.loggedInUser,
-            image: "/Imgs/IMG_20181224_164433.jpg"
-          }),
-          {
-            "Content-Type": "application/json"
-          }
+          formData
         );
         // Taking user to his/her places
         historyObj.push(`/${Auth.loggedInUser}/places`);
@@ -122,6 +124,7 @@ export default function NewPlace() {
           validators={[VALIDATOR_REQUIRE()]}
           onInput={InputHandler}
         />
+        <UploadImage id={"image"} onInput={InputHandler} />
         <div className="form-control buttons">
           {/* Submit button will be able if whole form data is valid otherwise it i'll be disabled- */}
           <button type="submit" disabled={!states.isValid}>

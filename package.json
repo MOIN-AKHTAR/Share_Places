@@ -17,6 +17,7 @@
     "react-scripts": "3.4.0",
     "react-transition-group": "^4.3.0",
     "sharp": "^0.24.1",
+    "uuid": "^7.0.2",
     "validator": "^12.2.0"
   },
   "scripts": {
