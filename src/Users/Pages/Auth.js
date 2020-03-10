@@ -6,6 +6,7 @@ import Background from "../../Shares/Bakground/Background";
 import Model from "../../Shares/Model/Model";
 import { Appcontext } from "../../Shares/Context/AppContext";
 import { useHttpHook } from "../../Shares/Hooks/httpHooks";
+import UploadImage from "../../Shares/UploadImage/UploadImage";
 // import { useModelHooks } from "../../Shares/Hooks/modelHooks";
 import {
   VALIDATOR_EMAIL,
@@ -53,7 +54,8 @@ function Auth() {
       SetDataHandler(
         {
           ...States.inputs,
-          name: undefined
+          name: undefined,
+          image: undefined
         },
         States.inputs.email.isValid && States.inputs.password.isValid
       );
@@ -62,6 +64,10 @@ function Auth() {
         {
           ...States.inputs,
           name: {
+            value: "",
+            isValid: false
+          },
+          image: {
             value: "",
             isValid: false
           }
@@ -84,7 +90,7 @@ function Auth() {
             name: States.inputs.name.value,
             email: States.inputs.email.value,
             password: States.inputs.password.value,
-            image: "/Imgs/IMG_20181224_164433.jpg"
+            image: States.inputs.image.value
           }),
           {
             "Content-Type": "application/json"
@@ -130,9 +136,10 @@ function Auth() {
         </React.Fragment>
       )}
       <div className={"form-control"}>
-        {isLoading ? <h2>Login Required</h2> : <h2>Signup Required</h2>}
+        {isLogInMode ? <h2>Login Required</h2> : <h2>Signup Required</h2>}
         <hr />
         <form onSubmit={switchModeHandler}>
+          {!isLogInMode && <UploadImage id={"image"} onInput={InputHandler} />}
           {/* If we are is not in loginmode the Name input will also be visible- */}
           {!isLogInMode && (
             <Input

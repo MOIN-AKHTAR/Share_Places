@@ -2,7 +2,7 @@ const AppError = require("../../Utils/AppError");
 const AsyncWrapper = require("../../Utils/AsyncWrapper");
 const UserModel = require("../Model/UserModel");
 
-exports.Sigup = AsyncWrapper(async (req, res, next) => {
+exports.Signup = AsyncWrapper(async (req, res, next) => {
   const { name, email, password, image } = req.body;
   const User = new UserModel({ name, email, password, image });
   const CheckUser = await UserModel.findOne({
@@ -14,7 +14,7 @@ exports.Sigup = AsyncWrapper(async (req, res, next) => {
   await User.save();
   res.status(201).json({
     Status: "Success",
-    User
+    User: User.toObject({ getters: true })
   });
 });
 
