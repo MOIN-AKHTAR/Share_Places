@@ -29,7 +29,8 @@ exports.Login = AsyncWrapper(async (req, res, next) => {
   if (!User) {
     return next(new AppError("Invalid Email Or Password", 401));
   }
-  if (password !== User.password) {
+  const isAuthenticated = await User.decryptPassword(password, User.password);
+  if (!isAuthenticated) {
     return next(new AppError("Invalid Email Or Password", 401));
   }
   res.status(200).json({

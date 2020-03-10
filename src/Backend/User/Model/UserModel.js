@@ -1,4 +1,5 @@
 const Mongoose = require("mongoose");
+const Bcryptjs = require("bcryptjs");
 // const Validator = require("validator");
 const Schema = Mongoose.Schema;
 const userSchema = new Schema({
@@ -32,4 +33,19 @@ const userSchema = new Schema({
     }
   ]
 });
+
+// Instance Based Method-
+userSchema.methods.decryptPassword = async (password, hashedPassword) => {
+  return await Bcryptjs.compare(password, hashedPassword);
+};
+
+// Pre Hook
+userSchema.pre("save", async function(next) {
+  // If Password Is Not Modified We Will Go Ahead Without Hashing The Password-
+  if (!this.isModified("password")) return next();
+  // If Password Is Created Or Modified Then We Must Have To Hash The Password-
+  this.password = await Bcryptjs.hash(this.password, 12);
+  next();
+});
+
 module.exports = Mongoose.model("User", userSchema);
