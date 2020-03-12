@@ -1,13 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import Model from "../../../Shares/Model/Model";
 import Background from "../../../Shares/Bakground/Background";
 import { useModelHooks } from "../../../Shares/Hooks/modelHooks";
 import { useHttpHook } from "../../../Shares/Hooks/httpHooks";
 import LoadingSpinner from "../../../Shares/Loading_Spinner/LoadingSpinner";
+import { Appcontext } from "../../../Shares/Context/AppContext";
 import { Link } from "react-router-dom";
 import "./PlaceList.css";
 
 export default function PlaceList(props) {
+  const Auth = useContext(Appcontext);
   // Destructuring
   const { Place } = props;
   // Destructuring
@@ -28,7 +30,14 @@ export default function PlaceList(props) {
   ] = useHttpHook();
   const DeletePlace = async Id => {
     try {
-      await makeRequest("http://localhost:5000/api/v1/place/" + Id, "DELETE");
+      await makeRequest(
+        "http://localhost:5000/api/v1/place/" + Id,
+        "DELETE",
+        null,
+        {
+          Authorization: "Bearer " + Auth.token
+        }
+      );
       setMyplaces(prevState => prevState.filter(Place => Place._id !== Id));
     } catch (error) {}
   };

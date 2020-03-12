@@ -66,14 +66,17 @@ export default function NewPlace() {
         await makeRequest(
           "http://localhost:5000/api/v1/place/",
           "POST",
-          formData
+          formData,
+          {
+            Authorization: "Bearer " + Auth.token
+          }
         );
         // Taking user to his/her places
         historyObj.push(`/${Auth.loggedInUser}/places`);
       } catch (error) {}
     },
     // Dependencies
-    [makeRequest, historyObj, states, Auth.loggedInUser]
+    [makeRequest, historyObj, Auth.token, states, Auth.loggedInUser]
   );
 
   return (
@@ -81,17 +84,16 @@ export default function NewPlace() {
       {/* If we are loading we will show spinner */}
       {isLoading && <LoadingSpinner asOverlay />}
       {/* If any error occur and request send response with error we will show model with black backgound */}
-      {isError &&
-        !isLoading(
-          <React.Fragment>
-            <Background />
-            <Model
-              CloseModel={clearError}
-              header={errorHeader}
-              description={errorDescription}
-            />
-          </React.Fragment>
-        )}
+      {isError && !isLoading && (
+        <React.Fragment>
+          <Background />
+          <Model
+            CloseModel={clearError}
+            header={errorHeader}
+            description={errorDescription}
+          />
+        </React.Fragment>
+      )}
       {/* Otherwise form will be shown */}
       <form className="place-form" onSubmit={AddPlace}>
         <Input

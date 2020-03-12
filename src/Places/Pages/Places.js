@@ -31,7 +31,12 @@ export default function Places() {
       // and call inside which is not async because making useEffect function as async is not recomended-
       const MakePlaceGetRequest = async () => {
         const Data = await makeRequest(
-          `http://localhost:5000/api/v1/place/user/${Auth.loggedInUser}`
+          `http://localhost:5000/api/v1/place/user/${Auth.loggedInUser}`,
+          "GET",
+          null,
+          {
+            Authorization: "Bearer " + Auth.token
+          }
         );
         setLoadedPlaces(Data);
       };

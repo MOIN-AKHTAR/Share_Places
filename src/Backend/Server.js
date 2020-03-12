@@ -18,6 +18,8 @@ App.use((req, res, next) => {
     "Access-Control-Allow-Headers",
     "Origin,X-Requested-With,content-type,Accept,Authorization"
   );
+  // Req.method this is provided by browser automatically for security purpose
+  // Here We Are Agreeing and setting our allowed method inside if block-
   if (req.method === "OPTIONS") {
     // Request methods you wish to allow
     res.header(

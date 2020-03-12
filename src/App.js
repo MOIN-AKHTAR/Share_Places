@@ -15,18 +15,18 @@ import {
 import "./App.css";
 
 function App() {
-  const [isLoggedin, setIsLogIn] = useState(false);
-  const [loggedInUser, setLoggedInUser] = useState(null);
-  const login = useCallback(Id => {
-    setLoggedInUser(Id);
-    setIsLogIn(true);
+  const [token, setToken] = useState();
+  const [userId, setUserId] = useState();
+  const login = useCallback((Id, Token) => {
+    setToken(Token);
+    setUserId(Id);
   }, []);
   const logout = useCallback(() => {
-    setLoggedInUser(null);
-    setIsLogIn(false);
+    setToken(null);
+    setUserId(null);
   }, []);
   let Element;
-  if (isLoggedin) {
+  if (token) {
     Element = (
       <Switch>
         <Route path="/update/:uid/places" component={UpdatePlace} />
@@ -45,7 +45,15 @@ function App() {
     );
   }
   return (
-    <Appcontext.Provider value={{ isLoggedin, loggedInUser, login, logout }}>
+    <Appcontext.Provider
+      value={{
+        isLoggedin: !!token,
+        token: token,
+        loggedInUser: userId,
+        login,
+        logout
+      }}
+    >
       <Router>
         <Navbar />
         {Element}

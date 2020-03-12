@@ -1,6 +1,7 @@
 const Mongoose = require("mongoose");
 const Bcryptjs = require("bcryptjs");
-// const Validator = require("validator");
+const JWT = require("jsonwebtoken");
+// const validator = require("validator");
 const Schema = Mongoose.Schema;
 const userSchema = new Schema({
   name: {
@@ -13,8 +14,7 @@ const userSchema = new Schema({
     type: String,
     required: [true, "Please Provide Email"],
     unique: [true, "Please Provide Unique Email"]
-    // ,
-    // validate: [Validator.isEmail, "Please Provide Correct Email"]
+    // ,validate: [validator.isEmail, "Please Provide Correct Email"]
   },
   password: {
     type: String,
@@ -38,7 +38,8 @@ const userSchema = new Schema({
 userSchema.methods.decryptPassword = async (password, hashedPassword) => {
   return await Bcryptjs.compare(password, hashedPassword);
 };
-
+userSchema.methods.generateToken = Id =>
+  JWT.sign({ Id }, "MY_SUPER_SECRET_KEY", { expiresIn: "1h" });
 // Pre Hook
 userSchema.pre("save", async function(next) {
   // If Password Is Not Modified We Will Go Ahead Without Hashing The Password-

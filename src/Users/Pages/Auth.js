@@ -10,8 +10,7 @@ import UploadImage from "../../Shares/UploadImage/UploadImage";
 // import { useModelHooks } from "../../Shares/Hooks/modelHooks";
 import {
   VALIDATOR_EMAIL,
-  VALIDATOR_MINLENGTH,
-  VALIDATOR_REQUIRE
+  VALIDATOR_MINLENGTH
 } from "../../Shares/Utils/Validators.js";
 import "./Auth.css";
 function Auth() {
@@ -91,10 +90,13 @@ function Auth() {
         const Data = await makeRequest(
           "http://localhost:5000/api/v1/user/signup",
           "POST",
-          formData
+          formData,
+          {
+            Authorization: "Bearer " + Auth.token
+          }
         );
         // If Everything Ok Then We Will Set isLogin As True-
-        Auth.login(Data.User.id);
+        Auth.login(Data.id, Data.Token);
       } catch (error) {}
     } else {
       try {
@@ -106,15 +108,13 @@ function Auth() {
             password: States.inputs.password.value
           }),
           {
-            "Content-Type": "application/json"
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + Auth.token
           }
         );
         // If Everything Ok Then We Will Set isLogin As True-
-        Auth.login(Data.User.id);
-      } catch (error) {
-        // Making ShowModelState as true because in the begging it was false and this function revert state-
-        console.log(error);
-      }
+        Auth.login(Data.id, Data.Token);
+      } catch (error) {}
     }
   };
   return (
@@ -145,8 +145,8 @@ function Auth() {
               type={"name"}
               label={"Name"}
               placeholder={"Please Enter Your Name"}
-              errorText={"Please Provide Name"}
-              validators={[VALIDATOR_REQUIRE()]}
+              errorText={"Please Provide Name Atleast (3) Characters"}
+              validators={[VALIDATOR_MINLENGTH(3)]}
               onInput={InputHandler}
             />
           )}

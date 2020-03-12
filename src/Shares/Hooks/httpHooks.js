@@ -24,7 +24,6 @@ export const useHttpHook = () => {
 
         //  Checking whether result of AJAX call is +ive or not
         if (Data.Status === "Fail") {
-          console.log(Data);
           throw new Error(Data.error.message || Data.Message);
         }
         // Since AJAX call has completed therefor making as false

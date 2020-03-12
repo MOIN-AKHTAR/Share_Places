@@ -17,9 +17,12 @@ exports.Signup = AsyncWrapper(async (req, res, next) => {
     return next(new AppError("Check Your Email It Should Be Unique", 400));
   }
   await User.save();
+  const token = User.generateToken(User._id);
   res.status(201).json({
     Status: "Success",
-    User: User.toObject({ getters: true })
+    Token: token,
+    id: User._id
+    // User: User.toObject({ getters: true })
   });
 });
 
@@ -33,9 +36,12 @@ exports.Login = AsyncWrapper(async (req, res, next) => {
   if (!isAuthenticated) {
     return next(new AppError("Invalid Email Or Password", 401));
   }
+  const token = User.generateToken(User._id);
   res.status(200).json({
     Status: "Succes",
-    User: User.toObject({ getters: true })
+    Token: token,
+    id: User._id
+    // User: User.toObject({ getters: true })
   });
 });
 

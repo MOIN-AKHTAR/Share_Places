@@ -57,7 +57,10 @@ function UpdatePlace() {
           title: States.inputs.title.value,
           description: States.inputs.description.value
         }),
-        { "Content-Type": "application/json" }
+        {
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + Auth.token
+        }
       );
       // Take you to users places-
       historyObj.push(`/${Auth.loggedInUser}/places`);
@@ -68,7 +71,12 @@ function UpdatePlace() {
     // and call inside which is not async because making useEffect function as async is not recomended-
     const getPlace = async () => {
       const Data = await makeRequest(
-        `http://localhost:5000/api/v1/place/${id}`
+        `http://localhost:5000/api/v1/place/${id}`,
+        "GET",
+        null,
+        {
+          Authorization: "Bearer " + Auth.token
+        }
       );
       setLoadedPlace(Data.Place);
       SetDataHandler(
@@ -86,7 +94,7 @@ function UpdatePlace() {
       );
     };
     getPlace();
-  }, [SetDataHandler, id, makeRequest]);
+  }, [SetDataHandler, id, Auth.token, makeRequest]);
   // If places loaded after request successfull
   if (loadedPlace) {
     return (
