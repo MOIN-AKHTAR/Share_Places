@@ -7,7 +7,7 @@ module.exports = AsyncWrapper(async (req, res, next) => {
     Token = req.headers.authorization.split(" ")[1];
   }
   if (!Token) {
-    return next(new AppError("You Are Not Authorized", 401));
+    return next(new AppError("You Are Not Authorized", 403));
   }
   const Payload = JWT.verify(Token, "MY_SUPER_SECRET_KEY");
   req.userId = Payload.Id;

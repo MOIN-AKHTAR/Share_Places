@@ -41,7 +41,7 @@ export default function Places() {
         setLoadedPlaces(Data);
       };
       MakePlaceGetRequest();
-    }, [Auth.loggedInUser, makeRequest]);
+    }, [Auth.loggedInUser, Auth.token, makeRequest]);
   } catch (error) {}
   if (isLoading) {
     {
